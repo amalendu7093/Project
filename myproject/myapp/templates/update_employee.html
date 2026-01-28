@@ -1,0 +1,38 @@
+{% extends 'home.html' %}
+
+{% block title %}Update Employee{% endblock %}
+
+{% block content %}
+<header>
+    <h1>Update Employee</h1>
+   
+</header>
+<br>
+<div class="container">
+    <h2>Update Employee</h2>
+
+    {% if form.errors %}
+        <div class="form-errors">
+            {{ form.errors }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="name" value="{{ employee.name }}" required><br><br>
+        <input type="text" name="department" value="{{ employee.department }}" required><br><br>
+        <input type="email" name="email" value="{{ employee.email }}" required><br><br>
+        <input type="text" name="phone_number" value="{{ employee.phone_number }}" required><br><br>
+
+        <select name="status" required>
+            <option value="Enabled" {% if employee.status == "Enabled" %}selected{% endif %}>Enabled</option>
+            <option value="Disabled" {% if employee.status == "Disabled" %}selected{% endif %}>Disabled</option>
+        </select><br><br>
+
+        <button type="submit">Update Employee</button>
+    </form>
+
+    <a href="{% url 'employee_list' %}">← Back</a>
+</div>
+{% endblock %}
