@@ -13,4 +13,9 @@ class EmployeeForm(forms.ModelForm):
             'join_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
-       
+class EmployeeUpdateForm(forms.ModelForm):
+    status = forms.ChoiceField(choices=[('Enabled', 'Enabled'), ('Disabled', 'Disabled')], required=True)
+
+    class Meta:
+        model = Employee
+        fields = ['name', 'department', 'phone_number', 'email', 'status']

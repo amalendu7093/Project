@@ -16,7 +16,14 @@
             <th>Join Date</th>
             <th>Phone Number</th>
             <th>Email</th>
-            <th>Status</th>
+            <th>
+                Status
+                <select class="status-dropdown" onchange="filterByStatus(this)">
+                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All</option>
+                    <option value="enabled" {% if status_filter == 'enabled' %}selected{% endif %}>Enabled</option>
+                    <option value="disabled" {% if status_filter == 'disabled' %}selected{% endif %}>Disabled</option>
+                </select>
+            </th>
             <th>Action</th>
         </tr>
 
@@ -50,6 +57,38 @@
 <footer>
     © 2026 Employee Management System
 </footer>
+
+<style>
+    .status-dropdown {
+        padding: 6px 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        background-color: white;
+        transition: border-color 0.3s, background-color 0.3s;
+        width: 100%;
+        max-width: 120px;
+    }
+
+    .status-dropdown:hover {
+        border-color: #667eea;
+        background-color: #f9f9f9;
+    }
+
+    .status-dropdown:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 5px rgba(102, 126, 234, 0.2);
+    }
+</style>
+
+<script>
+    function filterByStatus(selectElement) {
+        const statusFilter = selectElement.value;
+        window.location.href = `?status=${statusFilter}`;
+    }
+</script>
 
 </body>
 </html>
