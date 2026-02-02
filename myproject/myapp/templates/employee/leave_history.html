@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leave History</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #eef2f3, #f9f9f9);
+            color: #333;
+            margin: 0;
+        }
+
+        /* NAVBAR */
+        nav {
+            background: #2c3e50;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        nav .logo {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            background-color: #34495e;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px 100px 20px;
+        }
+
+        .table-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.85em;
+            letter-spacing: 0.3px;
+            border-bottom: 2px solid #2c3e50;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #ddd;
+            font-size: 0.95em;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .status-pending {
+            color: #f39c12;
+            font-weight: 600;
+            background-color: #fef5e7;
+            padding: 6px 12px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .status-approved {
+            color: #27ae60;
+            font-weight: 600;
+            background-color: #eafaf1;
+            padding: 6px 12px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .status-rejected {
+            color: #c0392b;
+            font-weight: 600;
+            background-color: #fadbd8;
+            padding: 6px 12px;
+            border-radius: 3px;
+            display: inline-block;
+        }
+
+        .no-records {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                padding: 0;
+            }
+
+            nav .logo {
+                padding: 15px 20px;
+                border-bottom: 1px solid #34495e;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            nav ul li {
+                margin-left: 0;
+                border-bottom: 1px solid #34495e;
+            }
+
+            nav ul li a {
+                padding: 12px 20px;
+                display: block;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .container {
+                padding: 0 15px 100px 15px;
+            }
+
+            .table-card {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+                font-size: 0.85em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">EMS</div>
+        <ul>
+            <li><a href="{% url 'employee_dashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'apply_leave' %}">Apply Leave</a></li>
+            <li><a href="{% url 'user_profile' %}">Profile</a></li>
+            <li><a href="{% url 'leave_history' %}">Leave History</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="header">
+        <h1>Leave History</h1>
+        <p>View all your leave applications and their status</p>
+    </div>
+
+    <div class="container">
+        <div class="table-card">
+            <form method="get" class="filter-form" style="margin-bottom:16px;">
+                <label for="status" style="margin-right:8px;font-weight:600;color:#2c3e50;">Filter:</label>
+                <select name="status" id="status" onchange="this.form.submit()" style="padding:8px;border:1px solid #ddd;border-radius:4px;">
+                    <option value="all" {% if status == 'all' %}selected{% endif %}>All</option>
+                    <option value="Approved" {% if status == 'Approved' %}selected{% endif %}>Approved</option>
+                    <option value="Rejected" {% if status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                    <option value="Pending" {% if status == 'Pending' %}selected{% endif %}>Pending</option>
+                </select>
+            </form>
+            {% if leaves %}
+            <table>
+                <tr>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Reason</th>
+                    <th>Total Days</th>
+                    <th>Status</th>
+                </tr>
+                {% for leave in leaves %}
+                <tr>
+                    <td>{{ leave.leave_start_date|date:"m/d/Y" }}</td>
+                    <td>{{ leave.leave_end_date|date:"m/d/Y" }}</td>
+                    <td>{{ leave.reason }}</td>
+                    <td>{{ leave.Leave_count }}</td>
+                    <td>
+                        {% if leave.Leave_Status == 'Pending' %}
+                            <span class="status-pending">Pending</span>
+                        {% elif leave.Leave_Status == 'Approved' %}
+                            <span class="status-approved">Approved</span>
+                        {% elif leave.Leave_Status == 'Rejected' %}
+                            <span class="status-rejected">Rejected</span>
+                        {% else %}
+                            <span>{{ leave.Leave_Status }}</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <div class="no-records">
+                <p>No leave records found. <a href="{% url 'apply_leave' %}" style="color: #3498db;">Apply for leave</a></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        © 2026 Employee Management System
+    </footer>
+</body>
+</html>

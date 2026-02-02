@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate, login
 from django import forms
-from .models import Employee,User
+from .models import Employee,User,Employee_Leave
 from django.contrib.auth.hashers import make_password
-from .form import EmployeeForm,EmployeeUpdateForm
+from .form import EmployeeForm,EmployeeUpdateForm,Leave_Form
 
 from django.shortcuts import get_object_or_404
 
@@ -88,6 +88,23 @@ def employee_update(request, employee_id):
         'form': form,
         'employee': employee
     })
+#Leave application views
+def leave_applications(request):
+    status = request.GET.get('status', 'all')
+    leaves = Employee_Leave.objects.all()
+    if status in ['Approved', 'Rejected', 'Pending']:
+        leaves = leaves.filter(Leave_Status=status)
+
+    return render(request, 'leave_applications.html', {
+        'leaves': leaves,
+        'status': status,
+    })
+#view to update leave status
+def status_update(request, leave_id, new_status):
+    leave = get_object_or_404(Employee_Leave, id=leave_id)
+    leave.Leave_Status = new_status
+    leave.save()
+    return redirect('leave_applications')
 
 #================================login page view===============================
 def login_view(request):
@@ -100,7 +117,7 @@ def login_view(request):
           
             return redirect('home')
         elif user and user.check_password(password) and user.role == 'Employee' and user.employee.status == 'Enabled':
-            return HttpResponse("Employee Dashboard - Access Granted")
+            return redirect('employee_dashboard')
         else:
             return render(request, 'login.html', {'error': 'Invalid credentials or inactive account.'})
     return render(request, 'login.html')
@@ -112,3 +129,44 @@ def logout_view(request):
 
 
 #========================employee views========================#
+
+#employee dashboard view
+def employee_dashboard(request):
+    return render(request, 'employee/employee.html')
+#user profile view    
+def user_profile(request):
+    employee = request.user.employee
+    return render(request, 'employee/user_profile.html', {'employee': employee})
+
+#view to apply leave
+def apply_leave(request):
+    if request.method == "POST":
+        form = Leave_Form(request.POST)
+        if form.is_valid():
+            leave = form.save(commit=False)
+            total_leave_days = (leave.leave_end_date - leave.leave_start_date).days+1 
+            if leave.Leave_type == 'half-day':
+                total_leave_days -= 0.5
+                
+            leave.employee = request.user.employee
+            leave.Leave_count = total_leave_days
+            leave.save()
+            return redirect('leave_history')
+    else:
+        form = Leave_Form()
+    
+    return render(request, 'employee/apply_leave.html', {'form': form})
+
+#view to see leave history
+def leave_history(request):
+    employee = request.user.employee
+    status = request.GET.get('status', 'all')
+    leaves = Employee_Leave.objects.filter(employee=employee)
+    if status in ['Approved', 'Rejected', 'Pending']:
+        leaves = leaves.filter(Leave_Status=status)
+
+    return render(request, 'employee/leave_history.html', {
+        'leaves': leaves,
+        'status': status,
+    })
+

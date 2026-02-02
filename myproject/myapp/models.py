@@ -62,3 +62,36 @@ class Employee(models.Model):
     def __str__(self):
         status = "Enabled" if self.status else "Disabled"
         return f"{self.name} - {self.department} ({status})"
+class Employee_Leave(models.Model):
+    Leave_choices = [('half-day', 'Half Day'), 
+    ('full-day', 'Full Day'), 
+
+    ]
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    leave_start_date = models.DateField(
+        verbose_name="Leave Start Date"
+    )
+    leave_end_date = models.DateField(
+        verbose_name="Leave End Date"
+    )
+    reason = models.TextField(
+        verbose_name="Reason for Leave"
+    )
+    Leave_type = models.CharField(
+        max_length=50,
+        choices=Leave_choices,
+        verbose_name="Type of Leave"
+    )
+
+    Leave_Status = models.CharField(
+        max_length=20,
+        default="Pending",
+        verbose_name="Leave Status"
+    )
+    Leave_count = models.IntegerField(
+        verbose_name="Number of Leave Days"
+    )
+   
+
+    def __str__(self):
+        return f"Leave for {self.employee.name} from {self.leave_start_date} to {self.leave_end_date}"

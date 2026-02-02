@@ -9,6 +9,15 @@
 <div class="tcontainer">
     <h2>Employee List</h2>
 
+    <div class="table-controls" style="display:flex;justify-content:flex-end;margin:10px 0;">
+        <label for="status-filter" style="margin-right:8px;font-weight:600;color:#2c3e50;align-self:center;">Status:</label>
+        <select id="status-filter" class="status-dropdown" onchange="filterByStatus(this)">
+            <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All</option>
+            <option value="enabled" {% if status_filter == 'enabled' %}selected{% endif %}>Enabled</option>
+            <option value="disabled" {% if status_filter == 'disabled' %}selected{% endif %}>Disabled</option>
+        </select>
+    </div>
+
     <table>
         <tr>
             <th>Name</th>
@@ -16,14 +25,7 @@
             <th>Join Date</th>
             <th>Phone Number</th>
             <th>Email</th>
-            <th>
-                Status
-                <select class="status-dropdown" onchange="filterByStatus(this)">
-                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All</option>
-                    <option value="enabled" {% if status_filter == 'enabled' %}selected{% endif %}>Enabled</option>
-                    <option value="disabled" {% if status_filter == 'disabled' %}selected{% endif %}>Disabled</option>
-                </select>
-            </th>
+            <th>Status</th>
             <th>Action</th>
         </tr>
 
