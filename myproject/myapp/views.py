@@ -112,6 +112,8 @@ def login_view(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         user=authenticate(request,username=username,password=password)
+        if user is  None:
+            return render(request, 'login.html', {'error': 'Invalid credentials.'})
         login(request,user)
         if user and user.check_password(password) and user.role == 'Admin':
           
@@ -170,3 +172,30 @@ def leave_history(request):
         'status': status,
     })
 
+def delete_leave_history(request, leave_id):
+    leave = get_object_or_404(Employee_Leave, id=leave_id, employee=request.user.employee)
+    leave.delete()
+    return redirect('leave_history')
+def edit_leave(request, leave_id):
+    leave = get_object_or_404(Employee_Leave, id=leave_id, employee=request.user.employee)
+   
+    if request.method == "POST":
+        form = Leave_Form(request.POST, instance=leave)
+   
+        if form.is_valid():
+            
+            updated_leave = form.save(commit=False)
+            total_leave_days = (updated_leave.leave_end_date - updated_leave.leave_start_date).days + 1
+            if updated_leave.Leave_type == 'half-day':
+                total_leave_days -= 0.5
+
+            updated_leave.Leave_count = total_leave_days
+            updated_leave.save()
+            return redirect('leave_history')
+    else:
+        form = Leave_Form(instance=leave)
+
+    return render(request, 'employee/edit_leave.html', {
+        'form': form,
+        'leave': leave
+    })

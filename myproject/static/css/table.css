@@ -64,7 +64,7 @@
         }
 
         .btn-update {
-            background-color: #27ae60;
+            background-color: #229d64;
             color: white;
         }
 
@@ -74,12 +74,12 @@
         }
 
         .btn-delete {
-            background-color: #e74c3c;
+            background-color: #8c190c;
             color: white;
         }
 
         .btn-delete:hover {
-            background-color: #c0392b;
+            background-color: #eb2812;
             transform: translateY(-2px);
         }
 

@@ -5,9 +5,35 @@
     <h1>Employee List</h1>
     <p>Manage all employees</p>
 </header>
+<style>
+    .status-dropdown {
+        padding: 6px 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        background-color: white;
+        transition: border-color 0.3s, background-color 0.3s;
+        width: 100%;
+        max-width: 120px;
+    }
+
+    .status-dropdown:hover {
+        border-color: #667eea;
+        background-color: #f9f9f9;
+    }
+
+    .status-dropdown:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 5px rgba(102, 126, 234, 0.2);
+    }
+    
+</style>
+
 
 <div class="tcontainer">
-    <h2>Employee List</h2>
+    <h2>Employee Listtt</h2>
 
     <div class="table-controls" style="display:flex;justify-content:flex-end;margin:10px 0;">
         <label for="status-filter" style="margin-right:8px;font-weight:600;color:#2c3e50;align-self:center;">Status:</label>
@@ -44,7 +70,7 @@
                     <form id="delete-form-{{ employee.id }}" method="POST" action="{% url 'employee_delete' employee.id %}" class="delete-form" style="display: none;">
                         {% csrf_token %}
                     </form>
-                    <button class="btn-delete" onclick="confirmDelete({{ employee.id }})">Delete</button>
+                    <button class="btn-delete"  onclick="confirmDelete({{ employee.id }})">Delete</button>
                 </div>
             </td>
         </tr>
@@ -60,30 +86,7 @@
     © 2026 Employee Management System
 </footer>
 
-<style>
-    .status-dropdown {
-        padding: 6px 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 13px;
-        cursor: pointer;
-        background-color: white;
-        transition: border-color 0.3s, background-color 0.3s;
-        width: 100%;
-        max-width: 120px;
-    }
 
-    .status-dropdown:hover {
-        border-color: #667eea;
-        background-color: #f9f9f9;
-    }
-
-    .status-dropdown:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 5px rgba(102, 126, 234, 0.2);
-    }
-</style>
 
 <script>
     function filterByStatus(selectElement) {

@@ -20,6 +20,8 @@ urlpatterns = [
     path("employee/leave/", views.apply_leave, name="apply_leave"),
     path("employee/leave/history/", views.leave_history, name="leave_history"),
     path("employee/userprofile/", views.user_profile, name="user_profile"),
+    path("employee/delete_history/<int:leave_id>/", views.delete_leave_history, name="delete_leave"),
+    path("employee/edit_leave/<int:leave_id>/", views.edit_leave, name="employee_edit_leave"),
     
 
     ]    
