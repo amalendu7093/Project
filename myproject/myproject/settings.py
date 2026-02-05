@@ -130,5 +130,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+
+# Directory where `collectstatic` will collect static files for production
+STATIC_ROOT = BASE_DIR / "staticfiles"
 AUTH_USER_MODEL='myapp.User'
 

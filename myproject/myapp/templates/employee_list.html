@@ -6,6 +6,99 @@
     <p>Manage all employees</p>
 </header>
 <style>
+     h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #e6f2ff;
+        }
+
+        td {
+            color: #444;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-view, .btn-update, .btn-delete {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .btn-view {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-view:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-update {
+            background-color: #229d64;
+            color: white;
+        }
+
+        .btn-update:hover {
+            background-color: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background-color: #8c190c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #eb2812;
+            transform: translateY(-2px);
+        }
+
+        .delete-form {
+            display: inline;
+        }
+        .tcontainer {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
     .status-dropdown {
         padding: 6px 10px;
         border: 1px solid #ddd;
@@ -70,7 +163,7 @@
                     <form id="delete-form-{{ employee.id }}" method="POST" action="{% url 'employee_delete' employee.id %}" class="delete-form" style="display: none;">
                         {% csrf_token %}
                     </form>
-                    <button class="btn-delete"  onclick="confirmDelete({{ employee.id }})">Delete</button>
+                    <button class="btn-delete" style="background-color: red;" onclick="confirmDelete({{ employee.id }})">Delete</button>
                 </div>
             </td>
         </tr>

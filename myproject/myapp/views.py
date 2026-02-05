@@ -8,14 +8,24 @@ from django.contrib.auth.hashers import make_password
 from .form import EmployeeForm,EmployeeUpdateForm,Leave_Form
 
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from functools import wraps
 
-# Create your views here.
+def is_superuser(view_func):
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated and request.user.role == 'Admin':
+            return view_func(request, *args, **kwargs)
+        return HttpResponse("You are not authorized to view this page.", status=403)
+    return wrapper
 
 
 #===========================Admin dashboard view=====================================
 def home(request):
     return  render(request,"home.html")
 # view to add a new employee
+@login_required
+
 def add_employee(request):
     if request.method == "POST":
         form = EmployeeForm(request.POST)
@@ -133,6 +143,7 @@ def logout_view(request):
 #========================employee views========================#
 
 #employee dashboard view
+@login_required
 def employee_dashboard(request):
     return render(request, 'employee/employee.html')
 #user profile view    
@@ -141,6 +152,7 @@ def user_profile(request):
     return render(request, 'employee/user_profile.html', {'employee': employee})
 
 #view to apply leave
+@login_required
 def apply_leave(request):
     if request.method == "POST":
         form = Leave_Form(request.POST)
@@ -160,6 +172,7 @@ def apply_leave(request):
     return render(request, 'employee/apply_leave.html', {'form': form})
 
 #view to see leave history
+@login_required
 def leave_history(request):
     employee = request.user.employee
     status = request.GET.get('status', 'all')
@@ -172,10 +185,14 @@ def leave_history(request):
         'status': status,
     })
 
+
+@login_required
 def delete_leave_history(request, leave_id):
     leave = get_object_or_404(Employee_Leave, id=leave_id, employee=request.user.employee)
     leave.delete()
     return redirect('leave_history')
+    
+@login_required
 def edit_leave(request, leave_id):
     leave = get_object_or_404(Employee_Leave, id=leave_id, employee=request.user.employee)
    
